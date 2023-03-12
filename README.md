@@ -10,13 +10,13 @@
 <table>
     <tr>
         <td>
-            <img src="start_game.PNG" alt="">
+            <img src="start_game.png" alt="">
         </td>
         <td>
-            <img src="select_chip.PNG" alt="">
+            <img src="select_chip.png" alt="">
         </td>
         <td>
-            <img src="game.PNG" alt="">
+            <img src="game.png" alt="">
         </td>
     </tr>
 </table> 
