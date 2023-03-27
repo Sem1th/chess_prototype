@@ -9,7 +9,6 @@ namespace Checkers
     {
         public bool IsFreeCellToMove { get; set; }
         
-        [SerializeField] private Material _defaultMaterial;
         [SerializeField] private Material _selectMaterial;
         [SerializeField] private Material _freeCellMaterial;
         

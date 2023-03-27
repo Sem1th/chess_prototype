@@ -54,7 +54,7 @@ namespace Checkers
                 else if (CheckBorders(nextRow, nextColumn) &&
                          _cells[nextColumn, nextRow].Pair.Color != _playableSide.CurrentSide)
                 {
-                    DestroyCandidate.Add(_cells[nextColumn, nextRow].Pair);
+                    DestroyCandidate.Add(_cells[nextColumn, nextRow]);
                     
                     if (_playableSide.CurrentSide == ColorType.Black)
                     {

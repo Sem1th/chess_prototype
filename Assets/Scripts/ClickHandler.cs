@@ -7,21 +7,23 @@ using UnityEngine.EventSystems;
 
 namespace Checkers
 {
-    public class ClickHandler : MonoBehaviour
+    public class ClickHandler : MonoBehaviour, ISerializable
     {
         [SerializeField] private PlayableSide _playableSide;
         [SerializeField] private CameraMover _cameraMover;
 
         [SerializeField] private Material _chipHighlightMaterial;
 
-        [SerializeField] private CellComponent[,] _cells;
-        [SerializeField] private PathCreator _pathCreator;
-        [SerializeField] private List<CellComponent> _pairs;
-        private Vector3 _previousPosition;
+        private CellComponent[,] _cells;
+        private PathCreator _pathCreator;
+        private List<CellComponent> _pairs;
+        private Vector3 _nextPosition;
 
         private bool _isReadyToMove;
         private BaseClickComponent _cachedCell;
 
+        private IObservable _observer;
+        
         public List<ChipComponent> Chips { get; private set; }
 
         public event Action ObjectsMoved;
@@ -30,8 +32,15 @@ namespace Checkers
 
         public event Action<BaseClickComponent> ChipDestroyed;
 
+        public event Action StepOver; 
+
         public void Init(CellComponent[,] cells, List<ChipComponent> chipComponents)
         {
+            if (TryGetComponent(out _observer))
+            {
+                _observer.NextStepReady += OnNextMove;
+            }
+            
             Chips = chipComponents;
             _pathCreator = new PathCreator(cells, _playableSide);
 
@@ -49,8 +58,23 @@ namespace Checkers
             {
                 cell.Clicked -= OnCellClicked;
             }
+            
+            _observer.NextStepReady -= OnNextMove;
         }
 
+        private void OnNextMove(Coordinate target)
+        {
+            if (target.X == -1)
+            {
+                StepOver?.Invoke();
+                return;
+            }
+            
+            var targetCell = _cells[target.X, target.Y];
+            OnCellClicked(targetCell);
+        }
+        
+        
         private void OnCellClicked(BaseClickComponent cell)
         {
             if (_isReadyToMove)
@@ -72,6 +96,9 @@ namespace Checkers
             }
 
             HighlightBaseObjects(cell);
+
+            _observer?.Serialize(cell.Coordinate.ToString().ToSerializable(_playableSide, RecordType.Click));
+            StepOver?.Invoke();
         }
 
         private IEnumerator Move(BaseClickComponent cell)
@@ -83,10 +110,13 @@ namespace Checkers
 
             var eventSystem = EventSystem.current;
             eventSystem.gameObject.SetActive(false);
-
+            
             yield return StartCoroutine(_cachedCell.Pair.Move(cell));
-            _previousPosition = cell.transform.position;
+            _nextPosition = cell.transform.position;
+            var nextCoordinate = cell.Coordinate;
 
+            _observer?.Serialize(_cachedCell.Coordinate.ToString().ToSerializable(_playableSide, RecordType.Move, nextCoordinate.ToString()));
+            
             var destroyCandidate = _pathCreator.DestroyCandidate;
             if (destroyCandidate.Count != 0)
             {
@@ -97,30 +127,34 @@ namespace Checkers
             {
                 case ColorType.Black when cell.Coordinate.Y == 7:
                     GameEnded?.Invoke(ColorType.Black);
+                    StepOver?.Invoke();
                     yield break;
 
                 case ColorType.White when cell.Coordinate.Y == 0:
                     GameEnded?.Invoke(ColorType.White);
+                    StepOver?.Invoke();
                     yield break;
             }
 
             cell.Pair = _cachedCell.Pair;
+            cell.Pair.Coordinate = _cachedCell.Pair.Coordinate;
             _cachedCell.Pair = null;
 
             yield return StartCoroutine(_cameraMover.Move());
 
             eventSystem.gameObject.SetActive(true);
             ObjectsMoved?.Invoke();
+            StepOver?.Invoke();
         }
 
         private void DestroyCandidateChip(List<BaseClickComponent> destroyCandidate)
         {
-            foreach (var chip in destroyCandidate.Where(chip =>
-                         Vector3.Distance(chip.transform.position, _previousPosition) < 1.5f))
+            foreach (var cell in destroyCandidate.Where(chip =>
+                         Vector3.Distance(chip.transform.position, _nextPosition) < 1.5f))
             {
-                ChipDestroyed?.Invoke(chip);
-                Destroy(chip.gameObject);
-                return;
+                ChipDestroyed?.Invoke(cell.Pair);
+                _observer?.Serialize(cell.Coordinate.ToString().ToSerializable(_playableSide, RecordType.Remove));
+                Destroy(cell.Pair.gameObject);
             }
         }
 

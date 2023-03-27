@@ -83,10 +83,10 @@ namespace Checkers
     public delegate void ClickEventHandler(BaseClickComponent component);
     public delegate void FocusEventHandler(CellComponent component, bool isSelect);
     
-    public struct Coordinate
+    public readonly struct Coordinate
     {
-        public int X;
-        public int Y;
+        public readonly int X;
+        public readonly int Y;
 
         public Coordinate(int x, int y)
         {
@@ -96,7 +96,7 @@ namespace Checkers
 
         public override string ToString()
         {
-            return $"Y = {Y} || Y = {X}";
+            return $"{X},{Y}";
         }
     }
 }

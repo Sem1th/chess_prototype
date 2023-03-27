@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Checkers
 {
@@ -8,6 +9,7 @@ namespace Checkers
         public ColorType CurrentSide { get; private set; } =  ColorType.Black;
 
         [SerializeField] private ClickHandler _clickHandler;
+        [SerializeField] private PhysicsRaycaster _raycaster;
 
         private List<BaseClickComponent> _whiteChips = new();
         private List<BaseClickComponent> _blackChips = new();
@@ -71,7 +73,7 @@ namespace Checkers
         {
             var congrats = side == ColorType.Black ? "белая" : "черная";
             Debug.Log($"Поздравляем с победой, выйграла: {congrats} команда");
-            Time.timeScale = 0f;
+            _raycaster.enabled = false;
         }
     }
 }

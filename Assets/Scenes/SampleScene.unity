@@ -132,8 +132,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 30761797}
-  - component: {fileID: 30761798}
   - component: {fileID: 30761799}
+  - component: {fileID: 30761802}
+  - component: {fileID: 30761803}
   m_Layer: 0
   m_Name: GamePoleDesk
   m_TagString: Untagged
@@ -156,23 +157,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &30761798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 30761796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d13b0e3073139b4da7dc7600a9f9e88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playableSide: {fileID: 1687258589}
-  _cameraMover: {fileID: 1687258587}
-  _chipHighlightMaterial: {fileID: 2100000, guid: cd21e5061ffb44f4fab99772022e96a5,
-    type: 2}
-  _pairs: []
 --- !u!114 &30761799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,6 +175,39 @@ MonoBehaviour:
     type: 3}
   _chipPrefab: {fileID: -6446635928461731732, guid: e674ad8049e21d8489f1b3cf1deab5f2,
     type: 3}
+--- !u!114 &30761802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30761796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d13b0e3073139b4da7dc7600a9f9e88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playableSide: {fileID: 1687258589}
+  _cameraMover: {fileID: 1687258587}
+  _chipHighlightMaterial: {fileID: 2100000, guid: cd21e5061ffb44f4fab99772022e96a5,
+    type: 2}
+--- !u!114 &30761803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30761796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43a414c4ddd10c94ebfc5e8e52f87dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _raycaster: {fileID: 1687258583}
+  _delayBetweenRepeat: 0.6
+  _fileName: data_obs
+  _needSerialize: 0
+  _needDeserilize: 1
 --- !u!1 &462061967
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,7 +400,7 @@ Transform:
   - {fileID: 1756618840}
   - {fileID: 739459747}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1687258581
 GameObject:
@@ -487,7 +504,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 45.377003, y: 0, z: 0}
 --- !u!114 &1687258586
 MonoBehaviour:
@@ -549,7 +566,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf98a1f9bdfae343968cd40cc0e167d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clickHandler: {fileID: 30761798}
+  _clickHandler: {fileID: 30761802}
+  _raycaster: {fileID: 1687258583}
 --- !u!1 &1756618839
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,37 +599,6 @@ Transform:
   m_Father: {fileID: 1128788806}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45.377003, y: 0, z: 0}
---- !u!1 &1818083183
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1818083184}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1818083184
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1818083183}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0
